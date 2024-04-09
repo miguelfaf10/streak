@@ -1,11 +1,14 @@
+from typing import Annotated
 from fastapi import Depends, APIRouter
 from sqlalchemy.orm import Session
-from app.api.v1.deps import get_db
+from app.db import get_db
 
 router = APIRouter()
 
+db_dependency = Annotated[Session, Depends(get_db)]
+
 
 @router.get("/items/")
-def read_records(db: Session = Depends(get_db)):
+def read_activities(db: db_dependency):
     # Your logic here, using `db` as the session
     pass

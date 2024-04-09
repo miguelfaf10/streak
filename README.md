@@ -13,3 +13,13 @@ Explanation:
 - /tests: This directory holds the test suite, organized similarly to the application structure.
 - main.py: Entry point of the FastAPI application.
 - requirements.txt: Lists all Python dependencies for your project.
+
+
+
+Authentication and Security
+
+- Following tutorial in: https://www.youtube.com/watch?v=0A_GCXBCNUQ
+- Installed:
+    - pip install "python-jose[cryptography]"
+    - pip install python-multipart
+    - pip install "passlib[bcrypt]" 

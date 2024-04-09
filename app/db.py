@@ -2,6 +2,12 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
+
+from sqlalchemy.orm import declarative_base
+
+Base = declarative_base()
+
+
 # Database URL, adjust for your database (SQLite for development)
 SQLALCHEMY_DATABASE_URL = "sqlite:///./streak.db"
 
@@ -13,3 +19,11 @@ engine = create_engine(
 
 # SessionLocal class will be used to create sessions for each request
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
