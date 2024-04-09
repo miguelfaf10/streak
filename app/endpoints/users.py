@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 from typing import List, Annotated
 from app.db import get_db
 from app.crud import create_user, authenticate_user
-from app.schemas import CreateUserRequest
+from app.schemas import User
 from app.auth import (
     get_current_user,
     hash_password,
@@ -25,19 +25,22 @@ db_dependency = Annotated[Session, Depends(get_db)]
 user_dependency = Annotated[dict, Depends(get_current_user)]
 
 
-@router.get("/current_user", status_code=status.HTTP_200_OK)
+@router.get("/users", status_code=status.HTTP_200_OK)
 async def user(user: user_dependency):
     if user is None:
         raise HTTPException(status_code=404, detail="Authentication failed.")
     return {"User": user}
 
 
-@router.post("/new_user", status_code=status.HTTP_201_CREATED)
-async def new_user(db: db_dependency, create_user_request: CreateUserRequest):
-    create_user_hashed = CreateUserRequest(
-        username=create_user_request.username,
-        password=hash_password(create_user_request.password),
+@router.post("/users", status_code=status.HTTP_201_CREATED)
+async def new_user(db: db_dependency, user: User):
+    print("USER: ", user)
+    create_user_hashed = User(
+        username=user.username,
+        password=hash_password(user.password),
+        email=user.email,
     )
+    print("USER: ", create_user_hashed)
     create_user(db=db, user=create_user_hashed)
 
 

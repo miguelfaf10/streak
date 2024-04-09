@@ -34,7 +34,6 @@ def authenticate_user(db, username, password) -> Union[UserModel, bool]:
 def get_current_user(token: Annotated[str, Depends(oauth2_bearer)]):
 
     try:
-        print("STARTING")
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         username: str = payload.get("sub")
         user_id: int = payload.get("id")

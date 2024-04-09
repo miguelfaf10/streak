@@ -3,8 +3,7 @@ from app.endpoints import activities, activity_records, users
 from app.db import engine
 from app.db import Base  # This is to ensure models are imported
 from app.models import UserModel
-from app.models import Activity
-from app.models import ActivityRecord
+
 
 # Create all tables in the database.
 # Comment this out if you are using Alembic for migrations.
