@@ -4,18 +4,18 @@ from app.endpoints import activities, activity_records, users
 from app.db import engine
 from app.db import Base  # This is to ensure models are imported
 from app.models import UserModel
-
+from app.config import FASTAPI_DEBUG_MODE
 import logging
 
 logger = logging.getLogger(__name__)
 
-DEBUG_MODE = True
 
 # Create all tables in the database.
 # Comment this out if you are using Alembic for migrations.
 Base.metadata.create_all(bind=engine)
 
-app = FastAPI(debug=DEBUG_MODE)
+# create FastAPI application
+app = FastAPI(debug=FASTAPI_DEBUG_MODE)
 
 # Include routes from different endpoints
 app.include_router(users.router, prefix="/auth", tags=["users"])

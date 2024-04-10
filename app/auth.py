@@ -12,10 +12,7 @@ from jose import JWTError, jwt
 from app.crud import get_user
 from app.db import SessionLocal, get_db
 from app.models import UserModel
-
-
-SECRET_KEY = "2348ryahiwuhf374565293rh3h2q3f8328q4ry4f23"
-ALGORITHM = "HS256"
+from app.config import SECRET_KEY, ALGORITHM
 
 bcrypt_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_bearer = OAuth2PasswordBearer(tokenUrl="auth/token")
