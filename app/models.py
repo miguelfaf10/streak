@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Date, ForeignKey, Integer, String
+from sqlalchemy import Column, ForeignKey, Integer, String, Date, Interval
 from sqlalchemy.orm import relationship
 from app.db import Base
 
@@ -6,7 +6,7 @@ from app.db import Base
 class UserModel(Base):
     __tablename__ = "users"
 
-    user_id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(Integer, primary_key=True, autoincrement=True, unique=True)
     username = Column(String, unique=True)
     hashed_password = Column(String)
     email = Column(String)
@@ -15,16 +15,20 @@ class UserModel(Base):
 class ActivityModel(Base):
     __tablename__ = "activities"
 
-    activity_id = Column(Integer, primary_key=True, autoincrement=True)
+    activity_id = Column(Integer, primary_key=True, autoincrement=True, unique=True)
     user_id = Column(Integer, ForeignKey("users.user_id"))
     name = Column(String)
     description = Column(String)
     color = Column(String)
 
 
-class ActivityRecord(Base):
-    __tablename__ = "activity_records"
+class ActivityRecordModel(Base):
+    __tablename__ = "activities_records"
 
-    user_id = Column(Integer, ForeignKey("users.user_id"), primary_key=True, index=True)
+    record_id = Column(
+        Integer, primary_key=True, autoincrement=True, index=True, unique=True
+    )
+    user_id = Column(Integer, ForeignKey("users.user_id"))
     activity_id = Column(Integer, ForeignKey("activities.activity_id"))
     date = Column(Date)
+    duration = Column(Integer)

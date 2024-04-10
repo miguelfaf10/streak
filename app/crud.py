@@ -1,9 +1,9 @@
 from sqlalchemy.orm import Session
-from app.models import UserModel, ActivityModel
-from app.schemas import User, Activity
+from app.models import ActivityRecordModel, UserModel, ActivityModel
+from app.schemas import ActivityRecord, User, Activity
 
 
-## CRUD operations for User
+## CRUD operations for Users
 def create_user(db: Session, user: User):
     print("USER: ", user)
     db_user = UserModel(
@@ -29,7 +29,7 @@ def get_user(db: Session, email: str):
     return db.query(UserModel).filter(UserModel.email == email).first()
 
 
-## CRUD operations for Activity
+## CRUD operations for Activities
 def create_activity(
     db: Session,
     user_id: int,
@@ -46,3 +46,75 @@ def create_activity(
     db.refresh(db_activity)
     print(db_activity)
     return db_activity
+
+
+def get_activities(db: Session, user_id: int):
+    return db.query(ActivityModel).filter(ActivityModel.user_id == user_id).all()
+
+
+def delete_activity(db: Session, user_id: int, activity_id: int):
+
+    activity_records = (
+        db.query(ActivityRecordModel)
+        .filter(
+            ActivityRecordModel.activity_id == activity_id,
+            ActivityRecordModel.user_id == user_id,
+        )
+        .delete(synchronize_session=False)
+    )
+
+    activity = (
+        db.query(ActivityModel)
+        .filter(
+            ActivityModel.activity_id == activity_id,
+            ActivityModel.user_id == user_id,
+        )
+        .first()
+    )
+    if activity is None:
+        return None
+    db.delete(activity)
+    db.commit()
+    return activity
+
+
+## CRUD operations for Activity Records
+def create_activityrecord(
+    db: Session,
+    user_id: int,
+    activityrecord: ActivityRecord,
+):
+    db_activityrecord = ActivityRecordModel(
+        activity_id=activityrecord.activity_id,
+        date=activityrecord.date,
+        duration=activityrecord.duration,
+        user_id=user_id,
+    )
+    db.add(db_activityrecord)
+    db.commit()
+    db.refresh(db_activityrecord)
+    return db_activityrecord
+
+
+def get_activitiesrecords(db: Session, user_id: int):
+    return (
+        db.query(ActivityRecordModel)
+        .filter(ActivityRecordModel.user_id == user_id)
+        .all()
+    )
+
+
+def delete_activityrecord(db: Session, record_id: int, user_id: int):
+    activity_record = (
+        db.query(ActivityRecordModel)
+        .filter(
+            ActivityRecordModel.record_id == record_id,
+            ActivityRecordModel.user_id == user_id,
+        )
+        .first()
+    )
+    if activity_record is None:
+        return None
+    db.delete(activity_record)
+    db.commit()
+    return activity_record

@@ -3,7 +3,7 @@ from fastapi import Depends, APIRouter, HTTPException
 from starlette import status
 from sqlalchemy.orm import Session
 from app.auth import get_current_user
-from app.crud import create_activity
+import app.crud as crud
 from app.db import get_db
 from app.schemas import Activity, User
 
@@ -19,13 +19,33 @@ async def new_activity(
     current_user: user_dependency,
     create_activity_request: Activity,
 ):
-    print("current_user: ", current_user)
-    print("current_user.id: ", current_user["id"])
     if current_user is None:
         raise HTTPException(status_code=401, detail="Not authenticated.")
-    new_activity = Activity(
-        name=create_activity_request.name,
-        description=create_activity_request.description,
-        color=create_activity_request.color,
+
+    crud.create_activity(
+        db=db, user_id=current_user["id"], activity=create_activity_request
     )
-    create_activity(db=db, user_id=current_user["id"], activity=create_activity_request)
+
+
+@router.get("/", status_code=status.HTTP_200_OK)
+async def activities(db: db_dependency, current_user: user_dependency):
+
+    if current_user is None:
+        raise HTTPException(status_code=401, detail="Not authenticated.")
+    activities_db = crud.get_activities(db=db, user_id=current_user["id"])
+
+    activities = [Activity(**activity_db.__dict__) for activity_db in activities_db]
+    return {"Activities": activities}
+
+
+@router.delete("/{activity_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_activity(db: db_dependency, current_user: user_dependency, activity_id: int):
+
+    if current_user is None:
+        raise HTTPException(status_code=401, detail="Not authenticated.")
+
+    db_activityrecord = crud.delete_activity(
+        db, activity_id=activity_id, user_id=current_user["id"]
+    )
+    if db_activityrecord is None:
+        raise HTTPException(status_code=404, detail="Activity record not found")
