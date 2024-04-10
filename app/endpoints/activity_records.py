@@ -14,7 +14,7 @@ user_dependency = Annotated[dict, Depends(get_current_user)]
 
 
 @router.post("/", status_code=status.HTTP_201_CREATED)
-async def new_activity_record(
+async def create_activityrecord(
     db: db_dependency,
     current_user: user_dependency,
     create_activityrecord_request: ActivityRecord,
@@ -22,32 +22,26 @@ async def new_activity_record(
     if current_user is None:
         raise HTTPException(status_code=401, detail="Not authenticated.")
 
-    existing_activities = crud.get_activities(db, user_id=current_user["id"])
-
-    # extract activity_id from list
-    existing_activities_ids = [activity.activity_id for activity in existing_activities]
-
-    if (
-        existing_activities is None
-        or create_activityrecord_request.activity_id not in existing_activities_ids
+    if not crud.activity_exists(
+        db, create_activityrecord_request.activity_id, current_user["id"]
     ):
         raise HTTPException(status_code=404, detail="Activity type not found")
+
     crud.create_activityrecord(
         db=db, user_id=current_user["id"], activityrecord=create_activityrecord_request
     )
 
 
 @router.get("/", status_code=status.HTTP_200_OK)
-async def activities_records(db: db_dependency, current_user: user_dependency):
+async def get_activities_records(db: db_dependency, current_user: user_dependency):
 
     if current_user is None:
         raise HTTPException(status_code=401, detail="Not authenticated.")
-    activitiesrecords_db = crud.get_activitiesrecords(db=db, user_id=current_user["id"])
 
-    activitiesrecords = [
-        ActivityRecord(**activityrecord_db.__dict__)
-        for activityrecord_db in activitiesrecords_db
-    ]
+    activitiesrecords_db = crud.get_activitiesrecords(db=db, user_id=current_user["id"])
+    # Transform the database records into a list of ActivityRecord objects
+    activitiesrecords = crud.transform_activities_records(activitiesrecords_db)
+
     return {"ActivitiesRecords": activitiesrecords}
 
 
@@ -58,8 +52,10 @@ def delete_activityrecord(
 
     if current_user is None:
         raise HTTPException(status_code=401, detail="Not authenticated.")
+
     db_activityrecord = crud.delete_activityrecord(
         db, record_id=record_id, user_id=current_user["id"]
     )
+
     if db_activityrecord is None:
         raise HTTPException(status_code=404, detail="Activity record not found")

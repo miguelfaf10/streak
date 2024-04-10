@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from app.auth import get_current_user
 import app.crud as crud
 from app.db import get_db
-from app.schemas import Activity, User
+from app.schemas import Activity
 
 router = APIRouter()
 
@@ -32,9 +32,10 @@ async def activities(db: db_dependency, current_user: user_dependency):
 
     if current_user is None:
         raise HTTPException(status_code=401, detail="Not authenticated.")
-    activities_db = crud.get_activities(db=db, user_id=current_user["id"])
 
-    activities = [Activity(**activity_db.__dict__) for activity_db in activities_db]
+    activities_db = crud.get_activities(db=db, user_id=current_user["id"])
+    activities = crud.transform_activities(activities_db)
+
     return {"Activities": activities}
 
 
@@ -47,5 +48,6 @@ def delete_activity(db: db_dependency, current_user: user_dependency, activity_i
     db_activityrecord = crud.delete_activity(
         db, activity_id=activity_id, user_id=current_user["id"]
     )
+
     if db_activityrecord is None:
         raise HTTPException(status_code=404, detail="Activity record not found")

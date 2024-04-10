@@ -27,6 +27,7 @@ user_dependency = Annotated[dict, Depends(get_current_user)]
 
 @router.get("/users", status_code=status.HTTP_200_OK)
 async def user(user: user_dependency):
+
     if user is None:
         raise HTTPException(status_code=404, detail="Authentication failed.")
     return {"User": user}
@@ -34,13 +35,13 @@ async def user(user: user_dependency):
 
 @router.post("/users", status_code=status.HTTP_201_CREATED)
 async def new_user(db: db_dependency, user: User):
-    print("USER: ", user)
+
     create_user_hashed = User(
         username=user.username,
         password=hash_password(user.password),
         email=user.email,
     )
-    print("USER: ", create_user_hashed)
+
     create_user(db=db, user=create_user_hashed)
 
 
@@ -56,6 +57,7 @@ async def login_for_access_token(
             detail="Could not validate user.",
             headers={"WWW-Authenticate": "Bearer"},
         )
+
     token = create_access_token(user.username, user.user_id, timedelta(minutes=20))
 
     return {"access_token": token, "token_type": "bearer"}

@@ -30,6 +30,12 @@ def get_user(db: Session, email: str):
 
 
 ## CRUD operations for Activities
+def activity_exists(db: Session, activity_id: int, user_id: int):
+    existing_activities = get_activities(db, user_id)
+    existing_activities_ids = [activity.activity_id for activity in existing_activities]
+    return activity_id in existing_activities_ids
+
+
 def create_activity(
     db: Session,
     user_id: int,
@@ -78,6 +84,10 @@ def delete_activity(db: Session, user_id: int, activity_id: int):
     return activity
 
 
+def transform_activities(activities_db):
+    return [Activity(**activity_db.__dict__) for activity_db in activities_db]
+
+
 ## CRUD operations for Activity Records
 def create_activityrecord(
     db: Session,
@@ -118,3 +128,10 @@ def delete_activityrecord(db: Session, record_id: int, user_id: int):
     db.delete(activity_record)
     db.commit()
     return activity_record
+
+
+def transform_activities_records(activitiesrecords_db: list[ActivityRecordModel]):
+    return [
+        ActivityRecord(**activityrecord_db.__dict__)
+        for activityrecord_db in activitiesrecords_db
+    ]
