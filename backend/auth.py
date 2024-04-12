@@ -9,10 +9,10 @@ from passlib.context import CryptContext
 
 from fastapi import Depends, HTTPException
 from jose import JWTError, jwt
-from app.crud import get_user
-from app.db import SessionLocal, get_db
-from app.models import UserModel
-from app.config import SECRET_KEY, ALGORITHM
+from backend.crud import get_user
+from backend.db import SessionLocal, get_db
+from backend.models import UserModel
+from backend.config import SECRET_KEY, ALGORITHM
 
 bcrypt_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_bearer = OAuth2PasswordBearer(tokenUrl="auth/token")

@@ -2,10 +2,10 @@ from typing import Annotated
 from fastapi import Depends, APIRouter, HTTPException
 from starlette import status
 from sqlalchemy.orm import Session
-from app.auth import get_current_user
-import app.crud as crud
-from app.db import get_db
-from app.schemas import Activity
+from backend.auth import get_current_user
+import backend.crud as crud
+from backend.db import get_db
+from backend.schemas import Activity
 
 router = APIRouter()
 

@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
-from app.models import ActivityRecordModel, UserModel, ActivityModel
-from app.schemas import ActivityRecord, User, Activity
+from backend.models import ActivityRecordModel, UserModel, ActivityModel
+from backend.schemas import ActivityRecord, User, Activity
 
 
 ## CRUD operations for Users

@@ -1,6 +1,6 @@
 from sqlalchemy import Column, ForeignKey, Integer, String, Date, Interval
 from sqlalchemy.orm import relationship
-from app.db import Base
+from backend.db import Base
 
 
 class UserModel(Base):

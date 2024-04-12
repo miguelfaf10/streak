@@ -1,10 +1,12 @@
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
-from app.endpoints import activities, activity_records, users
-from app.db import engine
-from app.db import Base  # This is to ensure models are imported
-from app.models import UserModel
-from app.config import FASTAPI_DEBUG_MODE
+from fastapi.middleware.cors import CORSMiddleware
+
+from backend.endpoints import activities, activity_records, users
+from backend.db import engine
+from backend.db import Base  # This is to ensure models are imported
+from backend.models import UserModel
+from backend.config import FASTAPI_DEBUG_MODE
 import logging
 
 logger = logging.getLogger(__name__)
@@ -24,6 +26,14 @@ app.include_router(
     activity_records.router,
     prefix="/activity_records",
     tags=["activity_records"],
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allows all origins
+    allow_credentials=True,
+    allow_methods=["*"],  # Allows all methods
+    allow_headers=["*"],  # Allows all headers
 )
 
 

@@ -23,3 +23,15 @@ Authentication and Security
     - pip install "python-jose[cryptography]"
     - pip install python-multipart
     - pip install "passlib[bcrypt]" 
+
+
+
+
+# Front-end
+
+- Based on React + Bootstrap
+- Project created using `npx`
+- Used libraries:
+    - axios: for API connection
+
+References: https://www.youtube.com/watch?v=0zb2kohYZIM&t=0s
