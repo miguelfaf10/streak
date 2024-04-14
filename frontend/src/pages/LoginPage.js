@@ -1,15 +1,12 @@
-import React, { useContext } from "react"; // Import useContext
-import { Link } from "react-router-dom";
-import { AuthContext } from "../contexts/AuthContext"; // Import AuthContext
+import React from "react"; // Import useContext
 import Login from "../components/Login";
 
 function EntryPage() {
-  const { token } = useContext(AuthContext); // Get the token from the AuthContext
-
   return (
-    <div>
+    <>
+      <h1>LoginPage</h1>
       <Login />
-    </div>
+    </>
   );
 }
 

@@ -20,6 +20,12 @@ class Activity(BaseModel):
     color: str
 
 
+class ActivityOut(BaseModel):
+    activity_id: int
+    name: str
+    description: Optional[str] = "no description"
+    color: str
+
 class ActivityRecord(BaseModel):
     activity_id: int
     date: date

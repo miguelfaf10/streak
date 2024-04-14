@@ -1,21 +1,25 @@
 import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+
+import Button from "@mui/material/Button";
+
 import axios from "axios";
 import qs from "qs"; // You need to install qs with npm install qs
 import { AuthContext } from "../contexts/AuthContext"; // Import AuthContext
 
 function Login() {
-  const navigate = useNavigate();
+  // Get setAuth from AuthContext
+  const { auth, setAuth } = useContext(AuthContext);
+
   const [formData, setFormData] = useState({
     username: "",
     password: "",
   });
 
-  // Get setAuth from AuthContext
-  const { auth, setAuth } = useContext(AuthContext);
+  const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
+  const handleLogin = async (event) => {
+    event.preventDefault();
     try {
       const response = await axios({
         method: "post",
@@ -44,7 +48,8 @@ function Login() {
 
   return (
     <div className="container mt-5">
-      <h2>Login</h2>
+      <h1>Login</h1>
+
       <form onSubmit={handleLogin}>
         <div className="mb-3">
           <label htmlFor="username" className="form-label">
@@ -55,8 +60,8 @@ function Login() {
             className="form-control"
             id="username"
             value={formData.username}
-            onChange={(e) =>
-              setFormData({ ...formData, username: e.target.value })
+            onChange={(event) =>
+              setFormData({ ...formData, username: event.target.value })
             }
             required
           />
@@ -70,15 +75,16 @@ function Login() {
             className="form-control"
             id="password"
             value={formData.password}
-            onChange={(e) =>
-              setFormData({ ...formData, password: e.target.value })
+            onChange={(event) =>
+              setFormData({ ...formData, password: event.target.value })
             }
             required
           />
         </div>
-        <button type="submit" className="btn btn-primary">
+        <Button variant="contained" onClick={(event) => handleLogin(event)}>
           Login
-        </button>
+        </Button>
+        ;
       </form>
     </div>
   );

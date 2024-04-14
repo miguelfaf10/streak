@@ -1,19 +1,19 @@
-import React, { useContext } from "react"; // Import useContext
+import React from "react"; // Import useContext
+//import Typography from "@mui/material/Typography";
 import { Link } from "react-router-dom";
-import { AuthContext } from "../contexts/AuthContext"; // Import AuthContext
 
 function EntryPage() {
-  const { token } = useContext(AuthContext); // Get the token from the AuthContext
-
   return (
-    <div>
+    <>
+      <h1>Entry Page</h1>
       <Link to="/login">
         <button>Login</button>
       </Link>
+      {/*
       <Link to="/signup">
         <button>Signup</button>
-      </Link>
-    </div>
+      </Link> */}
+    </>
   );
 }
 

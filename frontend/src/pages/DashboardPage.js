@@ -1,15 +1,20 @@
-import React, { useContext } from "react"; // Import useContext
-import { Link } from "react-router-dom";
-import { AuthContext } from "../contexts/AuthContext"; // Import AuthContext
-import ListActivities from "../components/ListActivities";
+import React from "react"; // Import useContext
+import ActivitiesList from "../components/ActivitiesList";
+import Grid from "@mui/material/Unstable_Grid2";
+import Box from "@mui/material/Box";
 
 function DashboardPage() {
-  const { token } = useContext(AuthContext); // Get the token from the AuthContext
-
   return (
-    <div>
-      <ListActivities />
-    </div>
+    <Box p={5}>
+      <Grid container spacing={5}>
+        <Grid xs={8}>
+          <h1>Dashboard</h1>
+        </Grid>
+        <Grid item xs={4}>
+          <ActivitiesList />
+        </Grid>
+      </Grid>
+    </Box>
   );
 }
 

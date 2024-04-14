@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from backend.models import ActivityRecordModel, UserModel, ActivityModel
-from backend.schemas import ActivityRecord, User, Activity
+from backend.schemas import ActivityRecord, User, Activity, ActivityOut
 
 
 ## CRUD operations for Users
@@ -85,7 +85,7 @@ def delete_activity(db: Session, user_id: int, activity_id: int):
 
 
 def transform_activities(activities_db):
-    return [Activity(**activity_db.__dict__) for activity_db in activities_db]
+    return [ActivityOut(**activity_db.__dict__) for activity_db in activities_db]
 
 
 ## CRUD operations for Activity Records
