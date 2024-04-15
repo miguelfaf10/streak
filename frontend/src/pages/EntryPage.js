@@ -1,18 +1,19 @@
 import React from "react"; // Import useContext
 //import Typography from "@mui/material/Typography";
 import { Link } from "react-router-dom";
+import Button from "@mui/material/Button";
 
 function EntryPage() {
   return (
     <>
       <h1>Entry Page</h1>
       <Link to="/login">
-        <button>Login</button>
+        <Button variant="contained">Login</Button>
       </Link>
-      {/*
+
       <Link to="/signup">
-        <button>Signup</button>
-      </Link> */}
+        <Button variant="contained">Signup</Button>
+      </Link>
     </>
   );
 }

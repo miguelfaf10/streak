@@ -1,14 +1,18 @@
+// React imports
 import React from "react"; // Import useContext
-import ActivitiesList from "../components/ActivitiesList";
+// MUI imports
 import Grid from "@mui/material/Unstable_Grid2";
 import Box from "@mui/material/Box";
+// Custom imports
+import ActivitiesList from "../components/ActivitiesList";
+import MyAgenda from "../components/MyAgenda";
 
 function DashboardPage() {
   return (
     <Box p={5}>
       <Grid container spacing={5}>
         <Grid xs={8}>
-          <h1>Dashboard</h1>
+          <MyAgenda />
         </Grid>
         <Grid item xs={4}>
           <ActivitiesList />
